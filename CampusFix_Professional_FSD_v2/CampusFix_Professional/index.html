@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101827" />
+  <title>CampusFix — Smart Campus Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-art">
+      <div class="art-orb orb-one"></div><div class="art-orb orb-two"></div>
+      <div class="brand brand-light"><span class="brand-mark">C</span><span>Campus<span>Fix</span></span></div>
+      <div class="login-message">
+        <span class="eyebrow">THE CAMPUS, CONNECTED</span>
+        <h1>A better campus<br><em>starts here.</em></h1>
+        <p>One simple place to report issues, track progress, and help make campus life better for everyone.</p>
+        <div class="art-pills"><span>✦ Smart reporting</span><span>↗ Real-time tracking</span><span>⌂ Community first</span></div>
+      </div>
+      <div class="art-footer">CAMPUSFIX • STUDENT EXPERIENCE PLATFORM</div>
+    </div>
+    <div class="login-panel">
+      <div class="login-box">
+        <div class="brand brand-dark"><span class="brand-mark">C</span><span>Campus<span>Fix</span></span></div>
+        <span class="eyebrow" id="authEyebrow">WELCOME BACK</span>
+        <h2 id="authHeading">Sign in to your campus.</h2>
+        <p class="muted" id="authDescription">Sign in to report issues and stay up to date.</p>
+        <form id="loginForm">
+          <label id="nameField" class="hidden" for="loginName">Full name
+            <input id="loginName" type="text" autocomplete="name" maxlength="80" minlength="2" />
+          </label>
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" type="email" autocomplete="email" maxlength="254" required />
+          <label for="loginPassword">Password</label>
+          <div class="password-wrap"><input id="loginPassword" type="password" autocomplete="current-password" required /><button type="button" class="show-pass" id="togglePassword">Show</button></div>
+          <button class="btn btn-primary btn-wide" id="authSubmit" type="submit">Sign in <span>→</span></button>
+        </form>
+        <p class="auth-switch muted"><span id="authSwitchText">New to CampusFix?</span> <button type="button" class="text-btn" id="authModeToggle">Create a student account</button></p>
+        <p class="login-note">Your account is private to your campus workspace.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand brand-light sidebar-brand"><span class="brand-mark">C</span><span>Campus<span>Fix</span></span></div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="side-nav">
+        <button class="nav-link active" data-page="overview"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-link" data-page="complaints"><span class="nav-icon">▤</span> Complaints <span class="nav-count" id="navComplaintCount">0</span></button>
+        <button class="nav-link" data-page="lostfound"><span class="nav-icon">⌕</span> Lost & Found</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><div class="help-icon">✦</div><b>Make campus better</b><p>Your feedback helps build a better place to learn.</p><button id="quickReport" class="help-link">Report an issue <span>↗</span></button></div>
+        <button id="logoutBtn" class="logout-btn"><span>↪</span> Sign out</button>
+        <div class="sidebar-foot">CAMPUSFIX <span>v1.0.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button id="menuToggle" class="icon-btn mobile-menu" aria-label="Open menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <b id="crumbPage">Overview</b></div>
+        <div class="top-actions">
+          <button class="utility-btn admin-only hidden" id="backupBtn" type="button" title="Download full JSON backup">↓ Backup</button>
+          <button class="utility-btn admin-only hidden" id="restoreBtn" type="button" title="Restore from JSON backup">↑ Restore</button>
+          <input id="restoreInput" type="file" accept="application/json,.json" hidden />
+          <span class="role-chip" id="roleChip">STUDENT</span>
+          <button id="themeToggle" class="icon-btn" title="Toggle theme">◐</button>
+          <div class="user-mini"><div class="avatar" id="userAvatar">RS</div><div><b id="userName">Rasheed Shaik</b><small id="userRole">Student</small></div></div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="overviewPage" class="page">
+          <div class="welcome-row">
+            <div><span class="eyebrow" id="todayLabel">CAMPUS OVERVIEW</span><h1 id="welcomeTitle">Good morning, Rasheed <span>✦</span></h1><p class="muted">Here’s what’s happening around your campus today.</p></div>
+            <button class="btn btn-primary" id="newComplaintBtn"><span>＋</span> New complaint</button>
+          </div>
+          <div class="stat-grid">
+            <article class="stat-card"><div class="stat-top"><span>Total complaints</span><span class="stat-icon purple">▤</span></div><strong id="statTotal">0</strong><div class="stat-foot"><span class="trend">↗ Live</span> all reported issues</div></article>
+            <article class="stat-card"><div class="stat-top"><span>Pending review</span><span class="stat-icon amber">◷</span></div><strong id="statPending">0</strong><div class="stat-foot">Awaiting admin action</div></article>
+            <article class="stat-card"><div class="stat-top"><span>In progress</span><span class="stat-icon blue">↗</span></div><strong id="statProgress">0</strong><div class="stat-foot">Currently being resolved</div></article>
+            <article class="stat-card"><div class="stat-top"><span>Resolved</span><span class="stat-icon green">✓</span></div><strong id="statResolved">0</strong><div class="stat-foot"><span class="trend">✦ Great work</span> campus improvements</div></article>
+          </div>
+          <div class="dashboard-grid">
+            <section class="panel activity-panel">
+              <div class="panel-heading"><div><h3>Recent complaints</h3><p class="muted">Latest reports from your campus</p></div><button class="text-btn" data-goto="complaints">View all →</button></div>
+              <div id="recentComplaints" class="recent-list"></div>
+            </section>
+            <section class="panel status-panel">
+              <div class="panel-heading"><div><h3>Resolution snapshot</h3><p class="muted">Current complaint status</p></div><span class="live-dot">LIVE</span></div>
+              <div class="donut-wrap"><div class="donut" id="donutChart"><div><b id="resolvedPercent">0%</b><small>resolved</small></div></div></div>
+              <div class="legend"><span><i class="dot dot-green"></i> Resolved <b id="legendResolved">0</b></span><span><i class="dot dot-amber"></i> Pending <b id="legendPending">0</b></span><span><i class="dot dot-blue"></i> In progress <b id="legendProgress">0</b></span></div>
+            </section>
+          </div>
+          <section class="panel tip-panel"><div class="tip-symbol">✦</div><div><b>A small report can make a big difference.</b><p>See something that needs attention? Share the details and help your campus team take action.</p></div><button class="btn btn-soft" id="tipReport">Report now →</button></section>
+        </section>
+
+        <section id="complaintsPage" class="page hidden">
+          <div class="page-heading"><div><span class="eyebrow">CAMPUS SUPPORT</span><h1>Complaints & requests</h1><p class="muted">Report an issue and follow every step until it’s resolved.</p></div><button class="btn btn-primary" id="complaintsNewBtn">＋ New complaint</button></div>
+          <div class="panel table-panel">
+            <div class="table-toolbar"><div class="tabs" id="filterTabs"><button class="tab active" data-filter="All">All <span id="filterAll">0</span></button><button class="tab" data-filter="Pending">Pending</button><button class="tab" data-filter="In Progress">In progress</button><button class="tab" data-filter="Resolved">Resolved</button></div><div class="table-tools"><select id="priorityFilter" class="filter-select" aria-label="Filter by priority"><option value="All">All priorities</option><option>Urgent</option><option>High</option><option>Normal</option></select><button class="utility-btn" id="csvBtn" type="button">Export CSV</button><div class="search-box"><span>⌕</span><input id="searchInput" placeholder="Search complaints..." /></div></div></div>
+            <div class="table-scroll"><table><thead><tr><th>ISSUE</th><th>CATEGORY</th><th>LOCATION</th><th>DATE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="complaintsTable"></tbody></table></div>
+            <div id="emptyComplaints" class="empty-state hidden"><span>▤</span><b>No complaints found</b><p>Try another search or create a new complaint.</p></div>
+          </div>
+        </section>
+
+        <section id="lostfoundPage" class="page hidden">
+          <div class="page-heading"><div><span class="eyebrow">CAMPUS COMMUNITY</span><h1>Lost & Found</h1><p class="muted">Help lost belongings find their way back home.</p></div><button class="btn btn-primary" id="addItemBtn">＋ Post an item</button></div>
+          <div class="lost-intro"><div><span class="eyebrow">LOOKING FOR SOMETHING?</span><h2>Good things find their way back.</h2><p>Browse items reported by students and campus staff.</p></div><div class="lost-illustration">⌕</div></div>
+          <div class="lost-toolbar"><h3>Community board <span id="itemCount" class="count-pill">0 items</span></h3><div class="table-tools"><select id="itemTypeFilter" class="filter-select" aria-label="Filter lost and found items"><option value="All">All posts</option><option>Lost</option><option>Found</option></select><div class="search-box"><span>⌕</span><input id="itemSearch" placeholder="Search items..." /></div></div></div>
+          <div id="itemsGrid" class="items-grid"></div>
+          <div id="emptyItems" class="empty-state hidden"><span>⌕</span><b>No items found</b><p>Be the first to post a lost or found item.</p></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="complaintModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-head"><div><span class="eyebrow">CAMPUS SUPPORT</span><h2>Raise a complaint</h2><p class="muted">Tell us what needs attention.</p></div><button class="close-btn" data-close="complaintModal">×</button></div>
+      <form id="complaintForm" class="modal-form">
+        <label>Issue title<input id="issueTitle" maxlength="70" placeholder="e.g. Projector not working" required /></label>
+        <div class="form-row"><label>Category<select id="issueCategory" required><option value="">Choose category</option><option>Infrastructure</option><option>Electrical</option><option>Cleanliness</option><option>Water</option><option>Wi-Fi / Internet</option><option>Classroom Equipment</option><option>Other</option></select></label><label>Priority<select id="issuePriority"><option>Normal</option><option>High</option><option>Urgent</option></select></label></div>
+        <label>Location<input id="issueLocation" placeholder="e.g. Block A, Room 204" required /></label>
+        <label>Description<textarea id="issueDescription" rows="4" maxlength="400" placeholder="Add useful details so the team can resolve it faster..." required></textarea></label>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" data-close="complaintModal">Cancel</button><button type="submit" class="btn btn-primary">Submit complaint →</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="itemModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-head"><div><span class="eyebrow">COMMUNITY BOARD</span><h2>Post an item</h2><p class="muted">Share a lost or found belonging.</p></div><button class="close-btn" data-close="itemModal">×</button></div>
+      <form id="itemForm" class="modal-form">
+        <div class="form-row"><label>Post type<select id="itemType"><option>Found</option><option>Lost</option></select></label><label>Category<select id="itemCategory"><option>Electronics</option><option>Books & Notes</option><option>Accessories</option><option>Personal items</option><option>Other</option></select></label></div>
+        <label>Item name<input id="itemName" maxlength="60" placeholder="e.g. Blue water bottle" required /></label>
+        <label>Last seen / found at<input id="itemPlace" placeholder="e.g. Library, 1st floor" required /></label>
+        <label>Contact details (visible to signed-in users)<input id="itemContact" maxlength="160" autocomplete="email" placeholder="Email or phone for a hand-off" required /></label>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" data-close="itemModal">Cancel</button><button type="submit" class="btn btn-primary">Publish item →</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="detailModal" class="modal-backdrop hidden"><div class="modal detail-modal"><div class="modal-head"><div><span class="eyebrow">COMPLAINT DETAILS</span><h2 id="detailTitle">Issue title</h2></div><button class="close-btn" data-close="detailModal">×</button></div><div id="detailContent"></div></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
